@@ -188,16 +188,16 @@ namespace Asset_Tracking
 
             if (newAsset.assetType == "Desktop computer" || newAsset.assetType == "Laptop") {
                 newAsset = dbService.InsertNewComputerAsset((ComputerAsset)newAsset);
-                ComputerAssetsList.Add((ComputerAsset)newAsset);
+                ComputerAssetsList = dbService.GetComputerAssetsFromDB(true);
             } 
             else if (newAsset.assetType == "Mobile phone" || newAsset.assetType == "Tablet") {;
                 newAsset = dbService.InsertNewMobileAsset((MobileAsset)newAsset);
-                MobileAssetsList.Add((MobileAsset)newAsset);
+                MobileAssetsList = dbService.GetMobileAssetsFromDB(true);
             }
             else if (newAsset.assetType == "Office equipment")
             {
                 newAsset = dbService.InsertNewOfficeAsset((OfficeAsset)newAsset);
-                OfficeAssetsList.Add((OfficeAsset)newAsset);
+                OfficeAssetsList = dbService.GetOfficeAssetsFromDB(true);
             }
 
             ColoredText.WriteLine("\n A new asset has been added.\n\n", ConsoleColor.Green);
@@ -287,9 +287,9 @@ namespace Asset_Tracking
             
             int min = 1;
             int max = AssetsList.Count;
-            int index = Validation.GetValidatedIntFromConsole("Row number", min, max, false);
+            int rowNumber = Validation.GetValidatedIntFromConsole("Row number", min, max, false);
 
-            Asset assetToRemove = AssetsList[index - 1];
+            Asset assetToRemove = AssetsList[rowNumber - 1];
             string modelName = assetToRemove.modelName;
             string brand = assetToRemove.brand;
                        
@@ -299,9 +299,9 @@ namespace Asset_Tracking
             MobileAssetsList = dbService.GetMobileAssetsFromDB(true);
             OfficeAssetsList = dbService.GetOfficeAssetsFromDB(true);
 
-            AssetsList.RemoveAt(index - 1);
+            AssetsList.RemoveAt(rowNumber - 1);
 
-            ColoredText.WriteLine("\n The asset with the rownumber " + index + " and brand and model name " + brand + " " + modelName + " has been removed.\n\n", ConsoleColor.Green);
+            ColoredText.WriteLine("\n The asset with rownumber " + rowNumber + " and brand and model name " + brand + " " + modelName + " has been removed.\n\n", ConsoleColor.Green);
         }
 
         public void SaveAssetsToCsvFile()
@@ -400,7 +400,7 @@ namespace Asset_Tracking
                 Console.WriteLine(" 1. Office equipment");
             }
             
-            int rowNumberForAssetType = Validation.GetValidatedIntFromConsole("Asset type", 1, 5, allowNullOrEmpty);
+            int rowNumberForAssetType = Validation.GetValidatedIntFromConsole("Row number", 1, 5, allowNullOrEmpty);
 
             if (allowNullOrEmpty && rowNumberForAssetType == -1) { // GetValidatedIntFromConsole() returns -1 if the user just pressed enter.
                 return null;
@@ -625,8 +625,8 @@ namespace Asset_Tracking
             computerAsset.warrantyExpirationDate = new DateTime(2024, 1, 15);
             computerAsset.purchasePriceUSD = 1180;
             computerAsset.officeID = OfficesList[2].id; // Stockholm
-            computerAsset.serialNumber = "SN123456789";
-            computerAsset.employee = "Maria Rosenberg";
+            computerAsset.serialNumber = "SNGR12345678";
+            computerAsset.employee = "Hans Persson";
             computerAsset.localPrice = ConvertToLocalCurrency(computerAsset.purchasePriceUSD, OfficesList[2].currencyCode);
 
             ComputerAssetsList.Add(computerAsset);
@@ -639,7 +639,7 @@ namespace Asset_Tracking
             computerAsset.warrantyExpirationDate = new DateTime(2024, 1, 15);
             computerAsset.purchasePriceUSD = 1050;
             computerAsset.officeID = OfficesList[3].id; // Hamburg
-            computerAsset.serialNumber = "SN123456789";
+            computerAsset.serialNumber = "MNSN HGTD 1243 5789";
             computerAsset.employee = "Herman Müller";
             computerAsset.localPrice = ConvertToLocalCurrency(computerAsset.purchasePriceUSD, OfficesList[3].currencyCode);
 
@@ -653,7 +653,7 @@ namespace Asset_Tracking
             mobileAsset.warrantyExpirationDate = new DateTime(2024, 1, 15);
             mobileAsset.purchasePriceUSD = 1250;
             mobileAsset.officeID = OfficesList[0].id; // Los angeles
-            mobileAsset.serialNumber = "SN123456789";
+            mobileAsset.serialNumber = "RTSN 1234 5678";
             mobileAsset.employee = "John Smith";
             mobileAsset.localPrice = ConvertToLocalCurrency(mobileAsset.purchasePriceUSD, OfficesList[0].currencyCode);
 
@@ -667,11 +667,28 @@ namespace Asset_Tracking
             mobileAsset.warrantyExpirationDate = new DateTime(2024,10, 15);
             mobileAsset.purchasePriceUSD = 580;
             mobileAsset.officeID = OfficesList[4].id; // Paris
-            mobileAsset.serialNumber = "SN123456789";
+            mobileAsset.serialNumber = "SGNM 1234 5678";
             mobileAsset.employee = "Xavier D'Aboville";
             mobileAsset.localPrice = ConvertToLocalCurrency(mobileAsset.purchasePriceUSD, OfficesList[4].currencyCode);
 
             MobileAssetsList.Add(mobileAsset);
+
+
+            mobileAsset = new MobileAsset();
+            mobileAsset.assetType = "Mobile phone";
+            mobileAsset.brand = "Apple";
+            mobileAsset.modelName = "Iphone 12";
+            mobileAsset.purchaseDate = new DateTime(2023, 10, 15);
+            mobileAsset.warrantyExpirationDate = new DateTime(2024, 10, 15);
+            mobileAsset.purchasePriceUSD = 900;
+            mobileAsset.officeID = OfficesList[3].id; // Hamburg
+            mobileAsset.serialNumber = "DRSN 1234 5678";
+            mobileAsset.employee = "Dietrich Schmidt";
+            mobileAsset.localPrice = ConvertToLocalCurrency(mobileAsset.purchasePriceUSD, OfficesList[3].currencyCode);
+
+            MobileAssetsList.Add(mobileAsset);
+
+
 
             OfficeAsset officeAsset = new OfficeAsset();
             officeAsset.assetType = "Office equipment";
@@ -684,6 +701,21 @@ namespace Asset_Tracking
             officeAsset.serialNumber = "SN123456789";
             officeAsset.employee = "Göran Rosenberg";
             officeAsset.localPrice = ConvertToLocalCurrency(officeAsset.purchasePriceUSD, OfficesList[2].currencyCode);
+
+            OfficeAssetsList.Add(officeAsset);
+
+
+            officeAsset = new OfficeAsset();
+            officeAsset.assetType = "Office equipment";
+            officeAsset.brand = "HP";
+            officeAsset.modelName = "Color LaserJet Pro MFP M177fw";
+            officeAsset.purchaseDate = new DateTime(2024, 10, 15);
+            officeAsset.warrantyExpirationDate = new DateTime(2026, 1, 15);
+            officeAsset.purchasePriceUSD = 350;
+            officeAsset.officeID = OfficesList[1].id; // New York
+            officeAsset.serialNumber = "DCFF 1234 5678";
+            officeAsset.employee = "Adam Hamilton";
+            officeAsset.localPrice = ConvertToLocalCurrency(officeAsset.purchasePriceUSD, OfficesList[1].currencyCode);
 
             OfficeAssetsList.Add(officeAsset);
 
