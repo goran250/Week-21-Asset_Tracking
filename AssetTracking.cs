@@ -59,7 +59,7 @@ namespace Asset_Tracking
 
             Console.Write("\n (");
             ColoredText.Write("9", ConsoleColor.Yellow);
-            Console.Write(") Save assets to a CSV file.");
+            Console.Write(") Save assets to a JSON-file.");
 
             Console.Write("\n (");
             ColoredText.Write("10", ConsoleColor.Yellow);
@@ -103,7 +103,7 @@ namespace Asset_Tracking
                     break;
 
                 case 9:
-                    assetsHandler.SaveAssetsToCsvFile();
+                    assetsHandler.SaveAssetsToJsonFile();
                     break;
                 case 10:
                     System.Environment.Exit(0);
