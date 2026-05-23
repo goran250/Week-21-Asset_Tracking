@@ -33,7 +33,7 @@ namespace Asset_Tracking
             OfficeAssetsList = dbService.GetOfficeAssetsFromDB(true);
            
 
-            // Anropa denna metod för fylla en tom databas med 5 offices och 6 assets.
+            // Anropa denna metod för fylla en tom databas med 5 offices och 8 assets.
             // AddOfficesAndAssets();
         }
 
