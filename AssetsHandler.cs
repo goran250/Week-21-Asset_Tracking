@@ -323,23 +323,25 @@ namespace Asset_Tracking
             {
                 assetsList = AssetsList;
                 filename = "assets.json";
+                assetsType = "assets";
             }
             else if (rowNumber == 2)
             {
                 assetsList = ComputerAssetsList.Cast<Asset>().ToList();
                 filename = "computerAssets.json";
-                assetsType = "Computer";
+                assetsType = "Computer assets";
             }
             else if (rowNumber == 3)
             {
                 assetsList = MobileAssetsList.Cast<Asset>().ToList();
                 filename = "mobileAssets.json";
-                assetsType = "Mobile";
+                assetsType = "Mobile assets";
             }
             else if (rowNumber == 4)
             {
                 assetsList = OfficeAssetsList.Cast<Asset>().ToList();
                 filename = "officeAssets.json";
+                assetsType = "Office assets";
             }
 
             // Filen sparas i hämtade filer mappen. Det ska fungera på både windows och mac.
@@ -357,7 +359,7 @@ namespace Asset_Tracking
                 ColoredText.WriteLine("Failed to save assets!", ConsoleColor.Red);
             }
 
-            ColoredText.WriteLine("\n All " + assetsType + " assets have been saved to a json-file called " + filename + ".\n The file is in the Downloaded files-map on your computer.\n", ConsoleColor.Green);
+            ColoredText.WriteLine("\n All " + assetsType + " have been saved to a json-file called " + filename + ".\n The file is located in the Downloaded files-map on your computer.\n", ConsoleColor.Green);
         }
 
         private string GetAssetType()
